@@ -9,6 +9,7 @@ import UpdateGM from "./component/UpdateGM.jsx";
 import UpdateTF from "./component/UpdateTF.jsx";
 import UpdateOracle from "./component/UpdateOracle.jsx";
 import AddZtoken from "./component/AddZtoken.jsx";
+import RemoveZtoken from "./component/RemoveZtoken.jsx";
 
 function App() {
   const [walletAddress, setWalletAddress] = useState(null);
@@ -21,7 +22,6 @@ function App() {
       const web3 = new Web3(provider);
       const accounts = await web3.eth.getAccounts();
       setWalletAddress(accounts[0]);
-      console.log(walletAddress);
     } else {
       console.log("Non-ethereum browser detected.Please install Metamask");
     }
@@ -29,19 +29,36 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Baki Admin Portal</ h1>
-      <button onClick={onConnect}>Connect to metamask</button>
-      <p>{walletAddress}</p>
-      <p></p>
+      <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-4xl">
+        Baki Admin Portal
+      </h1>
+      <div className="flex flex-col float-right">
+        <button
+          className="grow-0 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+          onClick={onConnect}
+        >
+          Connect to metamask
+        </button>
+        <p>{walletAddress}</p>
+      </div>
       <AdjustColRatio />
       <br></br>
       <AddZtoken />
+      <br></br>
+      <RemoveZtoken />
+      <br></br>
       <BlacklistAddress />
+      <br></br>
       <PauseTXs />
+      <br></br>
       <UpdateTW />
+      <br></br>
       <UpdateSW />
+      <br></br>
       <UpdateGM />
+      <br></br>
       <UpdateTF />
+      <br></br>
       <UpdateOracle />
     </div>
   );
