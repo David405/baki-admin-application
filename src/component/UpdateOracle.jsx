@@ -7,17 +7,32 @@ function UpdateOracle() {
   const { contract } = useProvider();
 
   const updateOracle = async () => {
-    const tx = await contract?.setOracleAddress(address);
-    tx.wait();
+    try {
+      await contract
+        ?.setOracleAddress(address)
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-     useEffect(() => {
-       if (contract) {
-         contract?.treasuryWallet().then((result) => {
-           setValue(result);
-         });
-       }
-     }, [contract, value]);
+  useEffect(() => {
+    if (contract) {
+      contract
+        ?.treasuryWallet()
+        .then((result) => {
+          setValue(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [contract, value]);
 
   return (
     <div>

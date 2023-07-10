@@ -3,27 +3,37 @@ import useProvider from "../hooks/useProvider";
 import { ethers } from "ethers";
 
 function PauseTXs() {
-    const [value, setValue] = useState("");
+  const [value, setValue] = useState("");
   const { contract } = useProvider();
 
   const pauseTX = async () => {
-    const tx = await contract?.pauseTransactions();
-    tx.wait();
+    try {
+      await contract
+        ?.pauseTransactions()
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-    // useEffect(() => {
-    //   if (contract) {
-    //     contract?.TxPaused().then((result) => {
-    
-    //       console.log(result);
-    //     });
-    //   }
-    // }, [contract, contract.methods, value]);
-
   const unPauseTX = async () => {
-    console.log(contract);
-    const tx = await contract?.unPauseTransactions();
-    tx.wait();
+    try {
+      await contract
+        ?.unPauseTransactions()
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

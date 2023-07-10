@@ -8,15 +8,29 @@ function AddZtoken() {
   const { contract } = useOracle();
 
   const addZtoken = async () => {
-    const tx = await contract?.addZToken(nameA, address);
-    tx.wait();
+    try {
+      await contract
+        ?.addZToken(nameA, address)
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((e) => {
+          console.error(e);
+          alert(e);
+        });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
     if (contract) {
       contract?.getZTokenList().then((result) => {
         setZlist(result);
-      });
+      }).catch((err) => {
+        console.error(err);
+        alert('Error: ' + err.message);
+      })
     }
   }, [contract, zlist]);
 

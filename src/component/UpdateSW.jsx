@@ -9,17 +9,32 @@ function UpdateSW() {
   const { contract } = useProvider();
 
   const updateFee = async () => {
-    const tx = await contract?.changeSwapFee(Number(a), Number(b));
-    tx.wait();
+    try {
+      await contract
+        ?.changeSwapFee(Number(a), Number(b))
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-    useEffect(() => {
-      if (contract) {
-        contract?.swapFee().then((result) => {
+  useEffect(() => {
+    if (contract) {
+      contract
+        ?.swapFee()
+        .then((result) => {
           setValue(ethers.utils.formatUnits(result, 6).toString());
+        })
+        .catch((err) => {
+          console.error(err);
         });
-      }
-    }, [contract, value]);
+    }
+  }, [contract, value]);
 
   return (
     <div>

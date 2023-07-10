@@ -7,14 +7,33 @@ function BlacklistAddress() {
   const { contract } = useProvider();
 
   const blacklistAddress = async () => {
-    const tx = await contract?.blacklistAddress(addressS);
-    tx.wait();
+    try {
+      await contract
+        ?.blacklistAddress(addressS)
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const removeAddress = async () => {
-    console.log(contract);
-    const tx = await contract?.removeAddressFromBlacklist(addressR);
-    tx.wait();
+    try {
+      await contract
+        ?.removeAddressFromBlacklist(addressR)
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -36,7 +55,8 @@ function BlacklistAddress() {
         >
           blacklist user
         </button>
-      </div><br></br>
+      </div>
+      <br></br>
       <div>
         <h4 className="mb-4 text-1xl font-extrabold leading-none tracking-tight text-gray-900 md:text-1xl lg:text-1xl">
           Remove User from Blacklist

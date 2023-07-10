@@ -8,17 +8,32 @@ function UpdateTW() {
   const { contract } = useProvider();
 
   const updateAddress = async () => {
-    const tx = await contract?.addTreasuryWallet(address);
-    tx.wait();
+    try {
+      await contract
+        ?.addTreasuryWallet(address)
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-   useEffect(() => {
-     if (contract) {
-       contract?.treasuryWallet().then((result) => {
-         setValue(result);
-       });
-     }
-   }, [contract, value]);
+  useEffect(() => {
+    if (contract) {
+      contract
+        ?.treasuryWallet()
+        .then((result) => {
+          setValue(result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [contract, value]);
 
   return (
     <div>

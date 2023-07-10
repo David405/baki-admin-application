@@ -6,10 +6,20 @@ function RemoveZtoken() {
   const { contract } = useOracle();
 
   const removeZtoken = async () => {
-    const tx = await contract?.removeZToken(nameR);
-    tx.wait();
-
-    console.log(tx.toString());
+    try {
+      await contract
+        ?.removeZToken(nameR)
+        .then((tx) => {
+          tx.wait();
+          console.log(tx.toString());
+        })
+        .catch((err) => {
+          console.error(err.message);
+          alert(err.message)
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

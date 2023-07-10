@@ -8,21 +8,32 @@ function AdjustColRatio() {
   const [value, setValue] = useState("");
 
   const adjustRatio = async () => {
-    const tx = await contract?.setCollaterizationRatioThreshold(
-      Number(colRatio)
-    );
-    tx.wait();
+    try {
+      await contract
+        ?.setCollaterizationRatioThreshold(Number(colRatio))
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  useEffect(() =>  {
-  if (contract) {
-     contract?.COLLATERIZATION_RATIO_THRESHOLD().then((result) => {
-        setValue(ethers.utils.formatUnits(result, 0).toString());
-     }
-     )
-  }
-  
-  },[contract,value]);
+  useEffect(() => {
+    if (contract) {
+      contract
+        ?.COLLATERIZATION_RATIO_THRESHOLD()
+        .then((result) => {
+          setValue(ethers.utils.formatUnits(result, 0).toString());
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [contract, value]);
 
   return (
     <div>

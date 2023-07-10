@@ -5,21 +5,36 @@ import { ethers } from "ethers";
 function UpdateTF() {
   const [a, setA] = useState("");
   const [b, setB] = useState("");
-   const [value, setValue] = useState("");
+  const [value, setValue] = useState("");
   const { contract } = useProvider();
 
   const updateSplit = async () => {
-    const tx = await contract?.changeGlobalMintersFee(Number(a), Number(b));
-    tx.wait();
+    try {
+      await contract
+        ?.changeGlobalMintersFee(Number(a), Number(b))
+        .then((tx) => {
+          tx.wait();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-      useEffect(() => {
-        if (contract) {
-          contract?.treasuryPercentOfSwapFee().then((result) => {
-            setValue(ethers.utils.formatUnits(result, 6).toString());
-          });
-        }
-      }, [contract, value]);
+  useEffect(() => {
+    if (contract) {
+      contract
+        ?.treasuryPercentOfSwapFee()
+        .then((result) => {
+          setValue(ethers.utils.formatUnits(result, 6).toString());
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [contract, value]);
 
   return (
     <div>
